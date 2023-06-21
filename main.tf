@@ -1,4 +1,12 @@
 terraform {
+  backend "s3" {
+    bucket         = "terraform-state-bucketd"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "my-terraform-state-lock-table"
+  }
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -11,6 +19,7 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+
 
 # Create a VPC
 
