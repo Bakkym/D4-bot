@@ -134,21 +134,19 @@ resource "aws_instance" "main" {
     }
 
   user_data = <<-EOF
-            #!/bin/bash
-            sudo yum update -y
-            sudo yum install git -y
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-            . ~/.nvm/nvm.sh
-            git clone https://github.com/Bakkym/D4-bot
-            cd D4-bot
-            chmod +x setup.sh
-            ./setup.sh
-            EOF
-
+                #!/bin/bash
+                sudo yum update -y
+                sudo yum install git -y
+                sudo yum install docker -y
+                sudo service docker start
+                sudo usermod -a -G docker ec2-user
+                docker run -d bakkym/diablo4-bot:latest
+              EOF
   tags = {
     Name = "Diablo IV BOT"
   }
 }
+
 
 
 

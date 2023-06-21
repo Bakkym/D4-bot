@@ -27,6 +27,14 @@ jobs:
           echo SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY}} >> .env
           echo SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_ACCESS_TOKEN}} >> .env
 
+      - name: 'Create docker image'
+        working-directory: .
+        run: |
+          docker login -u bakkym -p ${{ secrets.DOCKERHUB_SECRET_ACCESS_KEY}}
+          docker build -t bakkym/diablo4-bot .
+          docker push bakkym/diablo4-bot
+
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
