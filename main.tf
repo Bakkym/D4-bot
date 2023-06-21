@@ -134,7 +134,7 @@ resource "aws_instance" "main" {
     }
 
   user_data = <<-EOF
-            !#/bin/bash
+            #!/bin/bash
             sudo yum update -y
             sudo yum install git -y
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
