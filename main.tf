@@ -139,15 +139,10 @@ resource "aws_instance" "main" {
             sudo yum install git -y
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
             . ~/.nvm/nvm.sh
-            nvm install 16.15.1
-            nvm use 16.15.1
-            npm install yarn -g
-            npm install p2m -g
             git clone https://github.com/Bakkym/D4-bot
             cd D4-bot
-            yarn install
-            yarn build
-            pm2 start "node --require dotenv/config --experimental-specifier-resolution=node ./build/bot.js" --name "D4-bot"
+            chmod +x setup.sh
+            ./setup.sh
             EOF
 
   tags = {
