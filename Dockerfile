@@ -9,6 +9,8 @@ COPY . .
 
 # Instala las dependencias de la aplicación
 RUN yarn install
+RUN yarn deploy-commands
+RUN yarn pull-data
 RUN yarn build
 
 
