@@ -140,7 +140,7 @@ resource "aws_instance" "main" {
                 sudo yum install docker -y
                 sudo service docker start
                 sudo usermod -a -G docker ec2-user
-                docker run -d --name d4bot bakkym/diablo4-bot:l
+                docker run -d --name d4bot bakkym/diablo4-bot:latest
               EOF
   tags = {
     Name = "Diablo IV BOT"
