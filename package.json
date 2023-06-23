@@ -1,5 +1,4 @@
 {
- main
   "name": "black-book",
   "main": "src/bot.ts",
   "license": "MIT",
@@ -88,6 +87,5 @@
       "supabase": "^1.64.8",
       "ts-node": "^10.9.1"
     }
- setup_CI/CD
   }
   
