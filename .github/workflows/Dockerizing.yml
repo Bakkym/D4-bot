@@ -11,8 +11,8 @@ jobs:
     environment:
       name: Dockerizing
     steps:
-      -
-        name: Checkout
+      
+      - name: Checkout
         uses: actions/checkout@v2
         
       - name: 'Create env file'
@@ -24,7 +24,7 @@ jobs:
           echo DISCORD_GUILD_ID=${{ secrets.DISCORD_GUILD_ID}} >> .env
           echo GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN}} >> .env
           echo SUPABASE_URL=${{ secrets.SUPABASE_URL}} >> .env
-          echo SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY}} >> .env
+          echo SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY}} >> .env
           echo SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_ACCESS_TOKEN}} >> .env
 
       - name: 'Create docker image'
