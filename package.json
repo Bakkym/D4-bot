@@ -1,4 +1,50 @@
 {
+ main
+  "name": "black-book",
+  "main": "src/bot.ts",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "16.15.1",
+    "yarn": "1.22.19"
+  },
+  "scripts": {
+    "supa": "supabase",
+    "tsc": "tsc",
+    "build": "tsc",
+    "start": "node --require dotenv/config --experimental-specifier-resolution=node ./build/bot.js",
+    "temp": "node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm ./src/data/codexDatabase.ts",
+    "dev": "node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm ./src/bot.ts",
+    "pull-data": "node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm ./src/utility/pullData.ts",
+    "deploy-commands": "node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm ./src/utility/deployment.ts",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepublish": "yarn run pull-data",
+    "prepare": "yarn run compile",
+    "pretest": "yarn run compile",
+    "posttest": "yarn run lint",
+    "heroku-postbuild": "mkdir ./.cache && mv /app/.cache/puppeteer ./.cache"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.24.0",
+    "@types/node": "^18.14.2",
+    "capture-website": "^3.2.0",
+    "discord.js": "^14.9.0",
+    "dotenv": "^16.0.3",
+    "fuse.js": "^6.6.2",
+    "inquirer": "^9.1.4",
+    "node-fetch": "^3.3.1",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^19.0.7",
+    "@types/inquirer": "^9.0.3",
+    "gts": "^3.1.1",
+    "supabase": "^1.68.6",
+    "ts-node": "^10.9.1"
+
     "name": "black-book",
     "main": "src/bot.ts",
     "license": "MIT",
@@ -42,5 +88,6 @@
       "supabase": "^1.64.8",
       "ts-node": "^10.9.1"
     }
+ setup_CI/CD
   }
   

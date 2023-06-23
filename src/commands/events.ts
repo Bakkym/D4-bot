@@ -1,6 +1,7 @@
 import {
   CacheType,
   ChatInputCommandInteraction,
+  PermissionsBitField,
   SlashCommandBooleanOption,
   SlashCommandBuilder,
   SlashCommandMentionableOption,
@@ -46,6 +47,28 @@ const allEventRoleOption = (option: SlashCommandMentionableOption) => option
     .setName(allEventRoleOptionName)
     .setDescription('set user or role to be alerted on all events');
 
+
+const imagesOptionChoices = [
+  {
+    name: 'images on all alerts',
+    value: 'all'
+  },
+  {
+    name: 'images only on helltide alerts',
+    value: 'helltide'
+  },
+  {
+    name: 'no images',
+    value: 'none'
+  }
+];
+
+const imagesOptionName = 'show-images';
+const imagesOption = (option: SlashCommandStringOption) => option
+    .setName(imagesOptionName)
+    .setDescription('show images in alerts')
+    .addChoices(...imagesOptionChoices)
+
 const deleteMessagesOptionName = 'delete-expired-events';
 const deleteMessageOption = (option: SlashCommandBooleanOption) => option
     .setName(deleteMessagesOptionName)
@@ -62,8 +85,22 @@ const eventsBuilder = new SlashCommandBuilder()
   .addMentionableOption(worldBossRoleOption)
   .addMentionableOption(zoneEventRoleOption)
   .addMentionableOption(allEventRoleOption)
+  .addStringOption(imagesOption)
   .addBooleanOption(deleteMessageOption)
 
+
+const getImageOptions = (choice: string | null) => {
+  if ( choice === imagesOptionChoices[0].value ) {
+    return { zoneAndBossImages: true, helltideImages: true };
+  }
+  if ( choice === imagesOptionChoices[1].value ) {
+    return { zoneAndBossImages: false, helltideImages: true };
+  }
+  if ( choice === imagesOptionChoices[2].value ) {
+    return { zoneAndBossImages: false, helltideImages: false };
+  }
+  return { zoneAndBossImages: null, helltideImages: null };
+}
 
 const events = (db: dbWrapper) => ({
   name,
@@ -71,6 +108,13 @@ const events = (db: dbWrapper) => ({
     if ( !db ) {
       interaction.reply('db not initialized');
       return;
+    }
+
+    if (interaction.channel && interaction.guild?.members.me && interaction.channel.isTextBased() && !interaction.channel.isDMBased()) {
+      if (!interaction.guild.members.me.permissionsIn(interaction.channel).has([PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ViewChannel])) {
+        interaction.reply(`The bot doesn't currently have the "Send Messages" and "View Messages" permission for this channel, so alerts can't be sent. Once permissions are enabled, rerun this command!`);
+        return;
+      }
     }
 
     const hellTideEnabled = interaction.options.getBoolean(hellTideOptionName)
@@ -81,6 +125,9 @@ const events = (db: dbWrapper) => ({
     const zoneEventRole = interaction.options.getMentionable(zoneEventRoleOptionName);
     const allEventRole = interaction.options.getMentionable(allEventRoleOptionName);
     const deleteEvents = interaction.options.getBoolean(deleteMessagesOptionName);
+    const imageSetting = interaction.options.getString(imagesOptionName);
+
+    const { zoneAndBossImages, helltideImages } = getImageOptions(imageSetting);
 
     const upsert = {
       helltide: hellTideEnabled,
@@ -91,6 +138,8 @@ const events = (db: dbWrapper) => ({
       helltide_role: hellTideRole?.toString(),
       event_role: zoneEventRole?.toString(),
       auto_delete: deleteEvents,
+      zone_and_boss_images: zoneAndBossImages,
+      helltide_images: helltideImages,
     };
 
     const upsertAttributes = Object.fromEntries(Object.entries(upsert).filter(([_, v]) => v != null));
