@@ -2,7 +2,7 @@ name: Deploying
 
 on:
   push:
-    branches: [main, setup_CI/CD]
+    branches: [setup_CI/CD]
   workflow_dispatch:
       
 jobs:
