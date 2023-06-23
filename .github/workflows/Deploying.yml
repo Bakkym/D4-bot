@@ -8,8 +8,6 @@ on:
 jobs:
   Setup:
     runs-on: ubuntu-latest
-    environment:
-      name: Deploying
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
